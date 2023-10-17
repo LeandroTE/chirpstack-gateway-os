@@ -16,7 +16,39 @@ branch.
 Please refer to the [ChirpStack Gateway OS documentation](https://www.chirpstack.io/docs/chirpstack-gateway-os/)
 for documentation and pre-compiled images.
 
-## Building from source
+## Building from source with scripts
+
+### Initialize Docker
+
+
+``` bash
+sudo env UID=$(id -u) GID=$(id -g) docker compose build
+```
+
+Make sure to init git submodules
+``` bash
+git submodule update --init --recursive
+```
+Start the container
+``` bash
+sudo env UID=$(id -u) GID=$(id -g) docker compose run chirpstack-gateway-os
+```
+### Openwrt env
+
+execute the script to setup openwrt envoriment
+``` bash
+./setup_build.sh
+```
+
+
+### Compile firwamre
+
+To compile the firmware run the script below chosing which configuration
+``` bash
+./build_image.sh -a base_rak_rak7268v2
+```
+
+## Building from source with Make system
 
 ### Requirements
 

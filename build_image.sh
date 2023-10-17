@@ -12,23 +12,24 @@ REPO_PATH=$(pwd)
 VERSION="23.05"
 OPENWRT_PATH="openwrt"
 
-while getopts 'a:p:sh' OPTION
+while getopts 'a:seh' OPTION
 do
 	case $OPTION in
 	a)	
 		AFLAG=1
 		APP="$OPTARG"
 		;;
-	p)	OPENWRT_PATH="$OPTARG"
+	e)	
+		EFLAG=1
 		;;
-
-	s)	SFLAG=1
+	s)	
+		SFLAG=1
 		;;
-
 	h|?)	printf "Build Image for Caipirinha\n\n"
 		printf "Usage: %s [-p <openwrt_source_path>] [-a <application>] [-s] \n" $(basename $0) >&2
 		printf "	-a: application file to build\n"
 		printf "	-s: build in singe thread\n"
+		printf "	-e: set config only\n"
 		printf "\n"
 		exit 1
 		;;
@@ -54,6 +55,11 @@ cd $OPENWRT_PATH
 echo "Applying patches"
 quilt push -a
 make defconfig
+
+if [ ! -z $EFLAG ];then
+	echo "***Only updated config***"
+	exit
+fi
 
 echo ""
 echo "***Update build version and build date***"
