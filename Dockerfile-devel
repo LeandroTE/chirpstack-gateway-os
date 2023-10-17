@@ -3,6 +3,13 @@
 
 FROM docker.io/debian:stable-slim
 
+ARG USER_ID
+ARG GROUP_ID
+
+RUN echo $USER_ID
+RUN echo $GROUP_ID
+
+
 ENV GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 WORKDIR /workdir
 
@@ -31,7 +38,13 @@ RUN apt-get update && apt-get install --no-install-recommends --no-install-sugge
     'nano' \
   && \
   rm -f -r '/var/lib/apt/' && \
-  rm -f -r '/var/cache/apt/' && \
-  useradd -m -s '/bin/bash' -U 'buildbot'
+  rm -f -r '/var/cache/apt/' 
 
-USER buildbot
+RUN addgroup --gid $USER_ID user
+RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
+
+
+USER user
+
+# set dummy git config
+RUN git config --global --add safe.directory '*'

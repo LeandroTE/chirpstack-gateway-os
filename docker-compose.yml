@@ -1,8 +1,12 @@
+version: '3'
 services:
   chirpstack-gateway-os:
     build:
       context: .
       dockerfile: Dockerfile-devel
+      args:
+        USER_ID: ${UID}
+        GROUP_ID: ${GID}
     volumes:
       - .:/workdir
     ulimits:
